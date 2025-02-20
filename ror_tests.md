@@ -7,7 +7,7 @@
 `rails test test/models/post_test.rb`
 
 pojedynczy z pojedynczego:  
-`rails test test/controllers/posts_controller_test.rb -n test_should_get_show`
+`rails test test/controllers/posts_controller_test.rb -n test_should_get_show`  
 albo:  
 ``rails test test/controllers/posts_controller_test.rb:6``  
 (6 - numer wiersza, w którym zdefiniowany jest test)
