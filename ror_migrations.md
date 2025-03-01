@@ -401,7 +401,6 @@ Common Data Types ([source](https://www.jdeen.com/blog/list-of-rails-data-types-
 | :time          | datetime          | datetime     | time          | date          | time         |
 | :timestamp     | timestamp         | datetime     | datetime      | date          | datetime     |
 
-
 ## Generowanie migracji
 
 `rails generate migration MigrationName`
@@ -416,7 +415,7 @@ Common Data Types ([source](https://www.jdeen.com/blog/list-of-rails-data-types-
 
 ```rake db:migrate```
 
-```rake db:rollback```
+`rake db:rollback` - cofa ostatnią
 
 ### Adding New Columns
 
