@@ -5,13 +5,61 @@
 Ze strony <https://rubyinstaller.org/downloads/>,
 wersja rekomendowana, np. Ruby+Devkit 3.2.3-1 (x64).
 
-## 2. SQLite
+## 2.a. SQLite
 
 Ze strony <https://www.sqlite.org/download.html>
 ściągamy `sqlite-tools-win-x64-3450100.zip`, rozpakowujemy np. do `c:\sqlite3`,
 dodajemy zmienną środowiskową do tego katalogu.
 
-## 3. Rails
+## 2.b. Postgres i Pgadmin
+
+Postgres zgodnie z instrukcjami https://gorails.com/setup/ubuntu/26.04. Wg informacji zawartych [tutaj](https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-ruby-on-rails-application-on-ubuntu-20-04) potrzeba roli o tej samej nazwie co nazwa użytkownika:  
+`sudo -u postgres createuser chris -s`
+
+W każdym razie podczas instalacji automatycznie zakładany jest użytkownik o nazwie `postgres`. Aby się na niego przełączyć wydajemy polecenie:  
+`sudo -i -u postgres`  
+Możemy teraz odpalić konsolę PostgreSQL:  
+`psql`
+
+Warto od razu zdefiniować hasło użytkownikowi postgres, ponieważ bez tego nie udało mi się zalogować przy użyciu pgAdmin:  
+`ALTER USER postgres WITH PASSWORD 'your_password'`
+
+---
+
+Pgadmin na podstawie [artykuł medium](https://medium.com/yavar/install-and-configure-postgresql-and-pgadmin-on-ubuntu-20-04-22-04-52c52c249b9e) albo [oficjalna strona](https://www.pgadmin.org/download/pgadmin-4-apt/):
+
+`curl -fsS https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo gpg --dearmor -o /usr/share/keyrings/packages-pgadmin-org.gpg`
+
+`sudo sh -c 'echo "deb [signed-by=/usr/share/keyrings/packages-pgadmin-org.gpg] https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'`
+
+`sudo apt install pgadmin4`
+
+Nie umiem na ten moment odpalać z poziomu konsoli i odpalam z poziomu aplikacji.
+
+## 3. a. Rails on Linux
+
+Ponieważ pojawia się komunikat:
+
+```other
+mise WARN  deprecated [idiomatic_version_file_enable_tools]: 
+Idiomatic version files like ~/devel/ruby/myapp_test/.ruby-version are currently enabled by default. However, this will change in mise 2025.10.0 to instead default to disabled.
+
+You can remove this warning by explicitly enabling idiomatic version files for ruby with:
+
+    mise settings add idiomatic_version_file_enable_tools ruby
+
+You can disable idiomatic version files with:
+
+    mise settings add idiomatic_version_file_enable_tools "[]"
+
+See https://github.com/jdx/mise/discussions/4345 for more information.
+```
+
+wykonałem na pałę:
+
+`mise settings add idiomatic_version_file_enable_tools ruby`
+
+## 3. b. Rails on Windows
 
 Komendą `gem install rails`.
 Niestety u mnie poleciały błędy:

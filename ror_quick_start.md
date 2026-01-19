@@ -11,3 +11,12 @@
     `rails server`
 6. W przeglądarce łączymy się do aplikacji:
     <http://localhost:3000/>
+
+## Szybki start na nowym kompie
+
+1. Instalujemy rails zgodnie z [Instrukcja instalacji](/ror_installing).
+1. Klonujemy repozytorium.
+1. Wykonujemy `bundle install`
+1. `rails db:create`
+1. `rails db:migrate`
+2. `rails db:fixtures:load`
