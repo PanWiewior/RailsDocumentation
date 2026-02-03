@@ -143,29 +143,43 @@ Ze strony <https://code.visualstudio.com>.
 Na starym laptopie miałem takie dodatki: Ruby SolarGraph (Castwide), Ruby (Peng Lv), VSCode Ruby (Stafford Brunk), ruby-rubocop (misogi), endwise (KaiWood).  
 Na nowym laptopie postanowiłem zrezygnować z dodatków Ruby oraz VSCode Ruby, które są deprecated. W ich miejsce zainstalowałem Ruby LSP (Shopify). Na razie postanowiłem nie instalować SolarGraph, choć wg informacji na necie, mogą działać obok siebie.
 
-## 5. Dodatek do VS: Ruby LSP (Shopify)
+## 5. Dodatek do VS: Ruby LSP (Shopify) (update 2026-02-02)
 
-W miejsce wygaszanych Ruby (Peng Lv), VSCode Ruby (Stafford Brunk). Na razie bez SolarGraph, ale zobaczymy
+W miejsce wygaszanych Ruby (Peng Lv), VSCode Ruby (Stafford Brunk). Na razie bez SolarGraph, ale zobaczymy. Update 2026-02-02: nadal tylko Ruby LSP.
 
-## 6. Dodatek do VS: endwise (Kai Wood)
+## 6. Dodatek do VS: endwise (Kai Wood) (update 2026-02-02)
 
-## 7. gem rubocop
+Podobno nie warto przy korzystaniu z Copilota, ale nie gryzie się z Ruby LSP i można go doinstalować. Zobaczę.
 
-`gem install rubocop`
+## 7. RuboCop (update 2026-02-02)
 
-## 8. Dodatek do VS: RuboCop (RuboCop Headquarters)
+Od czasu Rails 7.2 domyślnie jest dodawany (w Gemfile) gem rubocop-rails-omakase. Jest to zestaw narzędzi i ustawień starannie dobrany przez twórców Rails.
 
-Wcześniej używałem ruby-rubocop (misogi), ale przestał być wspierany.
+Pod spodem nadal działa standardowy Rubocop, ale ten gem dostarcza plik .rubocop.yml z "sensownymi domyślnymi ustawieniami" zgodnymi z estetyką twórców Rails. W przeciwieństwie do standardowego Rubocopa, który bywa bardzo restrykcyjny, wersja Omakase skupia się na podstawach formatowania i spójności, unikając zasad, które często irytują programistów.
 
-## 9. Konfiguracja rubocop na poziomie projektu
+Zatem nie trzeba nic instalować. Można w konsoli wpisać `bundle exec rubocop -v` lub `bundle info rubocop` by poznać wersję zainstalowanego rubocopa.
+
+Wg AI dodatkowe gemy dodaje się tylko wtedy, gdy chcemy rozszerzyć analizę o specyficzne biblioteki, których Omakase nie obsługuje domyślnie:
+
+1. rubocop-rspec: Jeśli używasz RSpec zamiast Minitest (Omakase nie zawiera reguł dla RSpec).
+1. rubocop-performance: Jeśli zależy Ci na dodatkowych sugestiach dotyczących wydajności kodu Ruby.
+1. rubocop-capybara: Do sprawdzania testów systemowych/integracyjnych.
+
+Na razie jednak nic jeszcze nie instalowałem.
+
+## 8. Dodatek do rubocop w VS: niepotrzebny (update 2026-02-02)
+
+Wcześniej używałem RuboCop (RuboCop Headquarters), ale Ruby LSP domyślnie wykrywa rubocop i się sam integruje.
+
+## 9. Konfiguracja rubocop na poziomie projektu (update 2026-02-02)
 
 Plik `.rubocop.yml` o zawartości:
 
 ```other
-AllCops:
-  NewCops: enable
+# Omakase Ruby styling for Rails
+inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 
-Layout/EndOfLine:
+Style/EndOfLine:
   EnforcedStyle: lf
 ```
 
@@ -177,30 +191,102 @@ Na razie testowo. Oferuje rozpoznawanie mowy poprzez CTRL+ALT+V i Esc.
 
 Otworzyć ustawienia (`CTRL+`, lub `File -> Preferences -> Settings`), wyszukać `Emmet` i w części `Include Languages` dodać `Item: erb, Value: html`. W pliku `settings.json` powinien powstać wpis:
 
-```other
+```json
 "emmet.includeLanguages": {
     "erb": "html"
 }
 ```
 
-## 12. Dodatek do VS: ERB Helper Tags (Rayhan Wirjowerdojo)
+## 12. Własne snippety (update 2026-02-02)
 
-## 13. HtmlBeautifier
+Konfiguracja dla plików **ERB**:
 
-`gem install htmlbeautifier`
+1. W VS Code nacisnąć `Ctrl + Shift + P`.
+1. Wpisać **"Snippets: Configure Snippets"** i wybierz tą opcję.
+1. Wyszukać na liście język **erb** (jeśli nie widać, wybrać `html` – snippety często działają w obu, ale erb jest precyzyjniejszy).
+W otwartym pliku JSON, wewnątrz klamer `{ ... }`, wkleić poniższy kod:
 
-## 14. Dodatek do VS: ERB Formatter/Beautify (Ali Ariff)
-
-Dodatkowo w pliku settings.json należy dodać:
-
-```other
-"[erb]": {
-  "editor.defaultFormatter": "aliariff.vscode-erb-beautify",
-  "editor.formatOnSave": true
-},
-"files.associations": {
-  "*.html.erb": "erb"
+```json
+{
+  "ERB Output Tag": {
+    "prefix": "er",
+    "body": [
+      "<%= $1 %>"
+    ],
+    "description": "Wstawia tag wyświetlający <%= %>"
+  },
+  "ERB Execution Tag": {
+    "prefix": "re",
+    "body": [
+      "<% $1 %>"
+    ],
+    "description": "Wstawia tag logiki <% %>"
+  }
 }
 ```
 
-## 15. Dodatek do VS: vscode-icons (VSCode Icons Team)
+Aby snippety pojawiały się na samej górze podpowiedzi i działały błyskawicznie, sprawdzić w `settings.json` (lub w ustawieniach UI), czy jest:
+
+```json
+"editor.snippetSuggestions": "top"
+```
+
+## 13. Dodatek do VS: Stimulus LSP (Marco Roth) (update 2026-02-02)
+
+Wg AI: konfiguracja podpowiedzi:
+
+Dodać do swojego `settings.json`, aby podpowiedzi Stimulusa pojawiały się błyskawicznie podczas pisania:
+
+```json
+{
+  "stimulusLsp.controllerRoots": [
+    "app/javascript/controllers"
+  ],
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": true
+  }
+}
+```
+
+**Pro-tip: Łączenie ze snippetami**  
+Skoro mamy już własne snippety do ERB, dodajemy jeden, który błyskawicznie tworzy szkielet dla kontrolera Stimulus w widoku:
+
+- **Prefix:** `stc` (Stimulus Controller)
+- **Body:** `<div data-controller="$1">\n $2\n</div>`
+
+Dzięki temu jednym skrótem tworzymy kontener, a **Stimulus LSP** od razu podpowie nam nazwy naszych kontrolerów w miejscu `$1`.
+
+## 14. Dodatek do VS: Rails DB Schema (aki77) (update 2026-02-02)
+
+Pozwala szybko podejrzeć atrybuty modelu bez zaglądania do pliku `schema.rb`.
+
+## 15. Dodatek elia.erb-formatter (Elia Schito) (update 2026-02-02)
+
+`elia.erb-formatter` zamiast ERB Formatter/Beautify (Ali Ariff) bo:
+
+- jest zalecany przez społeczność Rails,
+- lepiej formatuje HTML+ERB,
+- nie ma konfliktów z Ruby LSP,
+- cechuje się lekkim działaniem
+
+Dodatkowo w pliku settings.json należy dodać:
+
+```json
+    "[erb]": {
+        "editor.defaultFormatter": "elia.erb-formatter",
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true
+    },
+    "files.associations": {
+        "*.html.erb": "erb"
+    },
+    "erb-formatter.lineLength": 120
+```
+
+## 16. Dodatek do VS: vscode-icons (VSCode Icons Team) (update 2026-02-02)
+
+## 17. Dodatkowa konfiguracja GIT
+
+Opisana w private-docs, np. dostosowanie bash w Ubuntu, by pokazywał informacje jak git-bash pod Windowsem.
